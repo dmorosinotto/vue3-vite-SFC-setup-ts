@@ -1,0 +1,23 @@
+{
+	"name": "vue3-vite-ts-experiments",
+	"version": "1.0.0",
+	"description": "Vue3 + Vite + TS experiments",
+	"keywords": [
+		"vue",
+		"Vue3",
+		"Vite",
+		"Typescript",
+		"TS"
+	],
+	"scripts": {
+		"--preinstall": "yarn add vite",
+		"start": "yarn vite"
+	},
+	"main": "index.js",
+	"author": "Daniele Morosinotto (d.morosinotto@icloud.com)",
+	"license": "MIT",
+	"private": true,
+	"devDependencies": {
+		"vite": "^1.0.0-rc.4"
+	}
+}
