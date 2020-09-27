@@ -9,8 +9,8 @@ export default {
 		//GESTIONE setHashtag FATTA TRAMITE Store (currHashtag SHARED STATE) PER EVITARE BUBBLE UP EVENTI, COMUNICAZIONE: hashtag => store => App
 		setHashtag() {
 			store.setHashtag(this.tag);
-		},
-	},
+		}
+	}
 };
 </script>
 <style scoped>

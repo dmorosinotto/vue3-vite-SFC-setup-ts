@@ -4,11 +4,11 @@
 	<!-- <span v-for="tag in info.hashtags" @click="setHashtag(tag)">{{ tag }}</span> -->
 
 	<!-- GESTIONE setHashtag FATTA TRAMITE Store (currHashtag SHARED STATE) PER EVITARE BUBBLE UP -->
-	<hashtag v-for="tag in info.hashtags" :tag="tag" />
+	<hashtag v-for="tag in info.hashtags" :key="tag" :tag="tag" />
 </template>
 
 <script setup="props, { emit }" lang="ts">
-import type { Info } from "./store";
+import type { Info } from "./local-infos";
 export { default as hashtag } from "./hashtag.vue";
 
 declare const props: { info: Info };

@@ -22,7 +22,7 @@ import { ref, computed } from "vue";
 export { default as MyCard } from "./MyCard.vue";
 export { default as PostCtrl } from "./PostCtrl.vue";
 export { default as HSlag } from "./HSlag";
-import { store, Info } from "./store";
+import { store } from "./store";
 import { WrapGetSet } from "./WrapGetSet";
 export const S = ref(store); //REFACTOR ESPONGO LO store AL <template> PER INVOCARE DIRETTAMENTE GETTERS/METODI
 
@@ -33,10 +33,10 @@ export const currHashtag = new WrapGetSet(
 );
 
 export function hLevel(likes: number): number {
-  //OGNI 5 LIKE SCALA DI UN LIVELLO: 0-5 -> h5 ; >50 -> h1
-  console.log("CALCOLA H", likes);
-  var n = Math.floor(likes / 5);
-  return n > 5 ? 1 : 5 - n;
+  //OGNI 6 LIKE SCALA DI UN LIVELLO: 0-5->h6 ; 6-12->h5 ; ... ;  30-35->h1 ; >=36 -> h0 ossia H1 + UPPECASE (text-transform: uppercase)
+  const level = likes >= 42 ? 0 : 6 - Math.floor(likes / 6);
+  console.log("CALCOLA H", likes, "->", level);
+  return level;
 }
 
 // GESTIONE CLASSICA setHashtag FATTA CON EVENTI PostCtrl => MyCard => App + HO currHashtag LOCALE

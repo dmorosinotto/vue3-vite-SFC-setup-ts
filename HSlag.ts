@@ -1,4 +1,4 @@
-import { h, defineComponent, VNode, VNodeArrayChildren } from "vue";
+import { h, defineComponent, VNodeNormalizedChildren } from "vue";
 
 // ESEMPIO DI COMPONENTE VUE CHE IMPLEMENTA DIRETTAMENTE render function
 // VEDI DOCS: https://v3.vuejs.org/guide/render-function.html#render-functions
@@ -11,7 +11,7 @@ const HSlag = defineComponent({
 			.replace(/\W+/g, "-") // replace non-word characters with dash
 			.replace(/(^-|-$)/g, ""); // remove leading and trailing dashes
 
-		return h("h" + this.level, [
+		return h("h" + (this.level || 1), { style: { "text-transform": this.level ? "capitalize" : "uppercase" } }, [
 			h(
 				"a",
 				{
@@ -31,17 +31,21 @@ const HSlag = defineComponent({
 });
 
 /** Recursively get text from children nodes */
-type RawChildren = Parameters<typeof h>[2];
-function getChildrenTextContent(children /*: VNode[] o RawChildren */) {
-	return children
-		.map((node) => {
-			return typeof node.children === "string"
-				? node.children
-				: Array.isArray(node.children)
-				? getChildrenTextContent(node.children)
-				: "";
-		})
-		.join("");
+function getChildrenTextContent(children: VNodeNormalizedChildren) {
+	console.log(children);
+	return Array.isArray(children)
+		? children
+				.map((node) => {
+					return typeof node !== "object"
+						? String(node)
+						: Array.isArray(node)
+						? getChildrenTextContent(node)
+						: node.children
+						? getChildrenTextContent(node.children)
+						: "";
+				})
+				.join("")
+		: String(children);
 }
 
 export default HSlag;

@@ -1,16 +1,11 @@
 import { reactive, computed } from "vue";
 import { default as FAKEPOSTS } from "./FAKE.js";
-
+import { Info } from "./local-infos";
 export type Post = {
 	id: number;
 	title: string;
 	body: string;
-	info: Info;
-};
-
-export type Info = {
-	likes: number;
-	hashtags: string[];
+	info: Info; // { likes: number, hashtags: string[] }
 };
 
 //CLASSE CHE FA DA CONTENITORE DELLO STATO (currHashtag SHARED STATE) + LOGICHE PER MANIPOLARLO
