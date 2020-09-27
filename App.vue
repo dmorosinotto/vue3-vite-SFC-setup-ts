@@ -1,26 +1,43 @@
 <template>
-	<label class="inline">
-		Search tag: <input type="text" :value="S.currHashtag" @input="S.setHashtag($event.target.value)" /> 🔍
-	</label>
-	<div class="posts">
-		<MyCard v-for="post in S.filterPosts" :key="post.id" w="50%">
-			<template v-slot:head>{{ post.title }}</template>
-			{{ post.body }}
-			<template v-slot:foot>
-				<!-- GESTIONE CLASSICA setHashtag FATTA CON EVENTI PostCtrl => MyCard => App -->
-				<!-- <PostCtrl :info="post.info" @setHashtag="filterByTag" /> -->
-				<PostCtrl :info="post.info" @like="S.incrementLike($event, post.id)" />
-			</template>
-		</MyCard>
-	</div>
+  <label class="inline">
+    Search tag: <input type="text" v-model.lazy.trim="currHashtag.value" /> 🔍
+  </label>
+  <div class="posts">
+    <MyCard v-for="post in S.filterPosts" :key="post.id" w="50%">
+      <template v-slot:head>
+        <HSlag :level="hLevel(post.info.likes)">{{ post.title }}</HSlag>
+      </template>
+      {{ post.body }}
+      <template v-slot:foot>
+        <!-- GESTIONE CLASSICA setHashtag FATTA CON EVENTI PostCtrl => MyCard => App -->
+        <!-- <PostCtrl :info="post.info" @setHashtag="filterByTag" /> -->
+        <PostCtrl :info="post.info" @like="S.incrementLike($event, post.id)" />
+      </template>
+    </MyCard>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
 export { default as MyCard } from "./MyCard.vue";
 export { default as PostCtrl } from "./PostCtrl.vue";
+export { default as HSlag } from "./HSlag";
 import { store, Info } from "./store";
+import { WrapGetSet } from "./WrapGetSet";
 export const S = ref(store); //REFACTOR ESPONGO LO store AL <template> PER INVOCARE DIRETTAMENTE GETTERS/METODI
+
+//USO UNA CLASSE CHE MI FA DA "WRAPPER" PER INVOCARE LOGICA getter/setter CUSTOM X INTERAGIRE CON STORE USANDO v-model
+export const currHashtag = new WrapGetSet(
+  () => store.currHashtag.value,
+  (val) => store.setHashtag(val)
+);
+
+export function hLevel(likes: number): number {
+  //OGNI 5 LIKE SCALA DI UN LIVELLO: 0-5 -> h5 ; >50 -> h1
+  console.log("CALCOLA H", likes);
+  var n = Math.floor(likes / 5);
+  return n > 5 ? 1 : 5 - n;
+}
 
 // GESTIONE CLASSICA setHashtag FATTA CON EVENTI PostCtrl => MyCard => App + HO currHashtag LOCALE
 // export const currHashtag = ref("");
@@ -54,21 +71,21 @@ export default {};
 
 <style scoped>
 .posts {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 .inline {
-	display: flex;
-	font-size: 18px;
-	padding: 10px;
+  display: flex;
+  font-size: 18px;
+  padding: 10px;
 }
 .inline > input {
-	width: 80%;
-	margin-left: 30px;
-	height: 24px;
-	font-size: inherit;
-	border: none;
-	border-bottom: 1px solid grey;
-	outline: none;
+  width: 80%;
+  margin-left: 30px;
+  height: 24px;
+  font-size: inherit;
+  border: none;
+  border-bottom: 1px solid grey;
+  outline: none;
 }
 </style>
